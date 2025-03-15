@@ -1,4 +1,4 @@
-# Investigating Slime Mold (Physarum polycephalum) Intelligence Through Maze Solving Ability
+#Investigating Slime Mold (Physarum polycephalum) Intelligence Through Maze Solving Ability
 #Undergraduate Honors Thesis - Data Analysis
 #annotated code utilizing data from the second round of data collection (revised methods)
 
@@ -29,6 +29,12 @@ ggplot(rawdata2,aes(x=RunNum, y=ER, color=Group))+
   ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
   labs(x="Maze Run Number", y="Efficiency Rating")
 
+ggplot(rawdata2,aes(x=RunNum, y=ER))+
+  geom_point()+
+  ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
+  labs(x="Maze Run Number", y="Efficiency Rating")+
+  geom_smooth(method = "lm")
+
 ggplot(rawdata2,aes(x=RunNum,y=ER, group=RunNum))+
   geom_boxplot()+
   ggtitle("Efficiency Rating over Number of Maze Attempts")+
@@ -57,6 +63,12 @@ ggplot(rawdata2,aes(x=RunNum, y=Day, color=Group))+
   geom_point()+
   ggtitle("Days for P. polycephalum to Complete the Maze")+
   labs(x="Maze Run Number", y="Day")
+
+ggplot(rawdata2,aes(x=RunNum, y=Day))+
+  geom_point()+
+  ggtitle("Days for P. polycephalum to Complete the Maze")+
+  labs(x="Maze Run Number", y="Day")+
+  geom_smooth(method = "lm")
 
 ggplot(rawdata2,aes(x=RunNum,y=ER, group=RunNum))+
   geom_boxplot()+
