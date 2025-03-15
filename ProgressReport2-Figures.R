@@ -1,4 +1,4 @@
-#Investigating Slime Mold (Physarum polycephalum) Intelligence Through Maze Solving Ability
+# Investigating Slime Mold (Physarum polycephalum) Intelligence Through Maze Solving Ability
 #Undergraduate Honors Thesis - Preliminary Data Analysis
 #completed for Second Progress Report
 #annotated code utilizing data from the first of data collection (un-revised methods)
