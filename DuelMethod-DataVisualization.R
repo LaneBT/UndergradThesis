@@ -41,3 +41,25 @@ ggplot(dueldata,aes(x=RunNum, y=Day))+
   labs(x="Maze Run Number", y="Day")+
   geom_smooth(method = "lm")
 
+#Bubble Chart about contamination percent cover?
+
+#creating percent contamination cover, new column
+library(tidyr)
+
+dueldatacont<-dueldata
+dueldatacont<-dueldata[c(1,2,3,4,5,6,7,8,9,10,15)]
+
+dueldatacont<-na.omit(dueldatacont)
+dueldatacont$cPER <- dueldatacont$cCOVER/datacont$totalsq
+
+#start with basic geom_point
+ggplot(dueldatacont, aes(x=RunNum, y=ER, size = cPER)) +
+  geom_point(alpha=0.7)
+
+
+#NOTE: add in color variable as where contamination started? I am not sure this is displaying the information I need displayed.
+
+#OTHER FIGURE IDEAS----
+#Chord Diagram... with information separated by family by maze run? or by day? OR by maze run and then by family
+
+
