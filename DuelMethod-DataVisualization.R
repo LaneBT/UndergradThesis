@@ -62,4 +62,35 @@ ggplot(dueldatacont, aes(x=RunNum, y=ER, size = cPER)) +
 #OTHER FIGURE IDEAS----
 #Chord Diagram... with information separated by family by maze run? or by day? OR by maze run and then by family
 
+#Stat Analysis:
+ad_RunNumER <- aov(ER ~ RunNum, data = dueldata)
+summary(ad_RunNumER)
+
+
+#anova - run num and ER
+ad_RunNumER <- aov(ER ~ RunNum, data = dueldata)
+summary(ad_RunNumER)
+
+#To my understanding, Tukey HSD requires catagories as factors
+#this should allow Tukey test to work
+dueldata.aov.factor = aov(ER ~ factor(RunNum), data = dueldata)
+TukeyHSD(dueldata.aov.factor)
+
+#anova - run num and DIV
+ad_RunNumDIV <- aov(DIV ~ RunNum, data = dueldata)
+summary(ad_RunNumDIV)
+
+dueldata.DIV.factor = aov(DIV ~ factor(RunNum), data = dueldata)
+TukeyHSD(dueldata.DIV.factor)
+
+
+#anova - run num and Day
+ad_RunNumDay <- aov(Day ~ RunNum, data = dueldata)
+summary(ad_RunNumDay)
+
+dueldata.Day.factor = aov(Day ~ factor(RunNum), data = dueldata)
+TukeyHSD(dueldata.Day.factor)
+
+#less significant than just one group of data
+#(wouldn't combine these things anyway)
 

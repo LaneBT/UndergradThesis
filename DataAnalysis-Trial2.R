@@ -8,6 +8,9 @@
 
 getwd()
 
+#This is only the data from completed maze attempts
+#ie the final day when the mold has reached the center of the maze.
+
 rawdata2 <- read.csv("DataTrial2_endroute.csv")
 
 #Manipulate Data----
@@ -89,7 +92,54 @@ ggplot(figurestacked, aes(x=RunNum, y=value, color=trait))+
   labs(x="Maze Attempt Number",y="Value")+
   scale_color_manual(name = "Variables", labels = c("Day to Completion","Efficiency Rating","Number of Diversions"), values = c("red", "green", "blue"))
 
+#Visualizing ER changes by family
+
+
+
 
 #statistical analysis----
+
+#I am concerned I don't have enough data for an anova
+
+#anova - run num and ER
+a_RunNumER <- aov(ER ~ RunNum, data = rawdata2)
+summary(a_RunNumER)
+
+#To my understanding, Tukey HSD requires catagories as factors
+#this should allow Tukey test to work
+data.aov.factor = aov(ER ~ factor(RunNum), data = rawdata2)
+TukeyHSD(data.aov.factor)
+
+#anova - run num and DIV
+a_RunNumDIV <- aov(DIV ~ RunNum, data = rawdata2)
+summary(a_RunNumDIV)
+
+data.DIV.factor = aov(DIV ~ factor(RunNum), data = rawdata2)
+TukeyHSD(data.DIV.factor)
+
+#anova - run num and Day
+a_RunNumDay <- aov(Day ~ RunNum, data = rawdata2)
+summary(a_RunNumDay)
+
+data.Day.factor = aov(Day ~ factor(RunNum), data = rawdata2)
+TukeyHSD(data.Day.factor)
+
+#to summarize, nothing statistically significant here.
+
+#Should I compare the first run within a group to the last run?
+#ie J1 ER versus J5 ER? 
+
+
+
+#Completing data analysis using Multicomp?? ----
+#Look into how to code this
+
+
+#Understanding Contamination----
+
+
+
+
+
 
 

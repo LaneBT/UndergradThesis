@@ -88,13 +88,21 @@ ggplot(data3,aes(x=RunNum, y=Day, color=value,))+
 # run and er # (????)
 ERanova <- aov(ER~RunNum,data=rawdata1)
 summary(ERanova)
-TukeyHSD(ERanova)
+
+
+#To my understanding, Tukey HSD requires catagories as factors
+#this should allow Tukey test to work
+ERanova.factor = aov(ER ~ factor(RunNum), data = rawdata1)
+TukeyHSD(ERanova.factor)
+
 
 #Run and Day
 
 dayanova <- aov(Day~RunNum,data=rawdata1)
 summary(dayanova)
-TukeyHSD(dayanova)
+
+dayanova.factor = aov(Day ~ factor(RunNum), data = rawdata1)
+TukeyHSD(dayanova.factor)
 
 #Run and div
 
@@ -103,3 +111,7 @@ summary(divanova)
 TukeyHSD(divanova)
 #did not work properly....revise
 
+divanova.factor = aov(Div ~ factor(RunNum), data = rawdata1)
+TukeyHSD(divanova.factor)
+
+#nothing significant
