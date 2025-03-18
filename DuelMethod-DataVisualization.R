@@ -8,6 +8,8 @@ getwd()
 dueldata <- read.csv("DuelMethod_endroute.csv")
 
 
+
+
 #Data Visualization----
 
 #Run Number by DAY, DR, DIV
@@ -93,4 +95,18 @@ TukeyHSD(dueldata.Day.factor)
 
 #less significant than just one group of data
 #(wouldn't combine these things anyway)
+
+
+#density map on group, runnum, contam cover
+
+#Duel Data Cont Cover
+#creating percent contamination cover, new column
+dueldatacont<-dueldata
+dueldatacont$cPER <- dueldatacont$cCOVER/dueldatacont$totalsq
+
+ggplot(dueldatacont, aes(x=Group,))
+
+
+
+
 

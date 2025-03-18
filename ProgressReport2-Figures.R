@@ -115,3 +115,4 @@ divanova.factor = aov(Div ~ factor(RunNum), data = rawdata1)
 TukeyHSD(divanova.factor)
 
 #nothing significant
+

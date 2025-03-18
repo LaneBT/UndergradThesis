@@ -62,6 +62,8 @@ ggplot(rawdata2,aes(x=RunNum,y=DIV, group=RunNum))+
 
 #run number by days to completion
 
+library(ggplot2)
+
 ggplot(rawdata2,aes(x=RunNum, y=Day, color=Group))+
   geom_point()+
   ggtitle("Days for P. polycephalum to Complete the Maze")+
@@ -129,6 +131,11 @@ TukeyHSD(data.Day.factor)
 #Should I compare the first run within a group to the last run?
 #ie J1 ER versus J5 ER? 
 
+
+#Two Way Anova? ----
+
+TWanov <- aov(ER ~ Group * RunNum, data = rawdata2)
+summary(TWanov)
 
 
 #Completing data analysis using Multicomp?? ----
