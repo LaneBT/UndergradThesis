@@ -108,6 +108,9 @@ library(nlme)
 #fitting linear regression model
 ERmodel<-lme(ER~RunNum, random=~1|Group,data=rawdata2)
 summary(ERmodel)
+
+plot(ERmodel, type="p")
+
 #residuals
 ERmodelR<-resid(ERmodel)
 
@@ -123,32 +126,34 @@ qqline(ERmodelR)
 #desnity plot does the same thing but look for bell shape
 plot(density(ERmodelR))
 
+install.packages("plot.lme")
+library(plot.lme)
+coefplot2(ERmodel)
+
+
+
+
+
 
 #so linear regression model looks pretty good!!
 
 
 #Trying a random effects model?
 install.packages("lme4")
-#it wont let me install this package!!! so I cannot test this code
 
 library(lme4)
 
 ER.mixed <- lmer(ER ~ RunNum + (1 | Group), data = rawdata2)
-summary(re.mixed)
+summary(ER.mixed)
 
-install.packages("plm")
-ERrandom<-plm(ER~RunNum, data=rawdata2, index="Group", model="random")
+#try to plot this?
 
+library(ggplot2)
 
+ggplot(rawdata2,aes(RunNum,ER,group=Group,col=Group))+
+  geom_point()
 
-
-
-
-
-
-
-
-
+plot_model(ER.mixed)
 
 
 
