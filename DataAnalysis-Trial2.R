@@ -101,7 +101,62 @@ ggplot(figurestacked, aes(x=RunNum, y=value, color=trait))+
 
 #statistical analysis----
 
-#I am concerned I don't have enough data for an anova
+#linear regression model with randomization -----
+
+library(nlme)
+
+#fitting linear regression model
+ERmodel<-lme(ER~RunNum, random=~1|Group,data=rawdata2)
+summary(ERmodel)
+#residuals
+ERmodelR<-resid(ERmodel)
+
+# residual vs fitted plot
+#helps visually detect heteroscedasticity (systematic change in the spread of residuals over range of values)
+plot(fitted(ERmodel), ERmodelR)
+abline(0,0)
+
+#Making a Q-Q plot
+#helps determine if residuals follow normal distribution (if they do, will loo like a 45 degree angle)
+qqnorm(ERmodelR)
+qqline(ERmodelR) 
+#desnity plot does the same thing but look for bell shape
+plot(density(ERmodelR))
+
+
+#so linear regression model looks pretty good!!
+
+
+#Trying a random effects model?
+install.packages("lme4")
+#it wont let me install this package!!! so I cannot test this code
+
+library(lme4)
+
+ER.mixed <- lmer(ER ~ RunNum + (1 | Group), data = rawdata2)
+summary(re.mixed)
+
+install.packages("plm")
+ERrandom<-plm(ER~RunNum, data=rawdata2, index="Group", model="random")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#I am concerned I don't have enough data for an anova-----
 
 #anova - run num and ER
 a_RunNumER <- aov(ER ~ RunNum, data = rawdata2)
@@ -130,6 +185,8 @@ TukeyHSD(data.Day.factor)
 
 #Should I compare the first run within a group to the last run?
 #ie J1 ER versus J5 ER? 
+
+
 
 
 #Two Way Anova? ----
