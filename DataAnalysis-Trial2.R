@@ -11,10 +11,10 @@ getwd()
 #This is only the data from completed maze attempts
 #ie the final day when the mold has reached the center of the maze.
 
-rawdata2 <- read.csv("Data2all.csv")
+rawdata2 <- read.csv("Data2_v2.csv")
 rawdata2$RunNumFac<-factor(rawdata2$RunNum)
 
-enddata2<- read.csv("Data2Endroute.csv")
+enddata2<- read.csv("endrouteData2_v2.csv")
 
 #Manipulate Data----
 
@@ -107,12 +107,23 @@ ggplot(figurestacked, aes(x=RunNum, y=value, color=trait))+
 #linear regression model with randomization -----
 
 library(nlme)
+library(ggplot2)
 
 #fitting linear regression model with random effects
 
 ERmodel<-lme(ER~RunNum, random=~1|Group,data=enddata2)
 summary(ERmodel)
 anova(ERmodel)
+
+Daymodel<-lme(Day~RunNum, random=~1|Group,data=enddata2)
+summary(Daymodel)
+anova(Daymodel)
+
+Divmodel<-lme(DIV~RunNum, random=~1|Group,data=enddata2)
+summary(Divmodel)
+anova(Divmodel)
+
+
 
 ERmodelall<-lme(ER~RunNum*Day, correlation=corAR1(form=~Day|Group/RunNum), random=~1|Group,data=rawdata2)
 summary(ERmodelall)
@@ -125,8 +136,8 @@ anova(ERmodelfac,type="marginal")
 
 ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
   geom_point()+
-  ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
-  labs(x="Day", y="Efficiency Rating")+
+  ggtitle("Change in Efficiency of P. polycephalum over Maze Attempts")+
+  labs(x="Day", y="Efficiency Rating",color="Maze Attempt Number")+
   geom_smooth(method = "lm")
 
 
@@ -161,8 +172,6 @@ ER.mixed <- lmer(ER ~ RunNum + (1 | Group), data = rawdata2)
 summary(ER.mixed)
 
 plot_model(ER.mixed)
-
-
 
 
 
@@ -212,6 +221,41 @@ summary(TWanov)
 
 
 #Understanding Contamination----
+
+#creating figures faceted by contamination
+
+library(ggplot2)
+
+ggplot(data = rawdata2)+
+  geom_boxplot(aes(y = ER))+
+  facet_wrap(~CONTAM)
+
+ggplot(data = rawdata2)+
+  geom_boxplot(aes(y = ER))+
+  facet_wrap(~CONTAM)
+
+CONTdat<-rawdata2[!rawdata2$CONTAM == "0", ]
+
+library(tidyr)
+
+CONTdat <- pivot_longer(CONTdat,c(11,12,13,14),names_to="ContType",values_to="Presence",values_drop_na=TRUE)
+CONTdat<-CONTdat[!CONTdat$Presence == "0", ]
+
+ggplot(data = CONTdat)+
+  geom_boxplot(aes(y = ER, x=ContType))
+
+
+#Manipulating df in steps for contam
+
+library(tidyr)
+library(dplyr)
+
+
+rawdata2 <- rawdata2 %>% mutate(Contamination = ifelse(CONTAM > 0, "Present", "Absent"))
+
+
+#can't do this becuase Contamination if a character, not integer
+CONTdat2 <- pivot_longer(rawdata2,c(11,12,13,14,17),names_to="ContaminationLocation",values_to="Where",values_drop_na=TRUE)
 
 
 
