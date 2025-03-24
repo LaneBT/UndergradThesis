@@ -11,7 +11,7 @@ getwd()
 #This is only the data from completed maze attempts
 #ie the final day when the mold has reached the center of the maze.
 
-rawdata2 <- read.csv("Data2_v2.csv")
+rawdata2 <- read.csv("data2_v3.csv")
 rawdata2$RunNumFac<-factor(rawdata2$RunNum)
 
 enddata2<- read.csv("endrouteData2_v2.csv")
@@ -249,17 +249,17 @@ ggplot(data = CONTdat)+
 
 library(tidyr)
 library(dplyr)
+library(ggplot2)
 
 
-rawdata2 <- rawdata2 %>% mutate(Contamination = ifelse(CONTAM > 0, "Present", "Absent"))
 
 
 #can't do this becuase Contamination if a character, not integer
-CONTdat2 <- pivot_longer(rawdata2,c(11,12,13,14,17),names_to="ContaminationLocation",values_to="Where",values_drop_na=TRUE)
+CONTdat2 <- pivot_longer(rawdata2,c(7,8,12,13,14,15),names_to="ContaminationLocation",values_to="Present",values_drop_na=TRUE)
+CONTdat2<-CONTdat2[!CONTdat2$Present == "0", ]
 
-
-
-
-
+CONTdat2$ContaminationLocation <- factor(CONTdat2$ContaminationLocation , levels=c("cABSENT", "cPRESENT", "cSTART", "cBOTH"))
+ggplot(data = CONTdat2)+
+  geom_boxplot(aes(y = ER, x=ContaminationLocation, fill=ContaminationLocation))
 
 
