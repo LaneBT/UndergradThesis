@@ -11,7 +11,10 @@ getwd()
 #This is only the data from completed maze attempts
 #ie the final day when the mold has reached the center of the maze.
 
-rawdata2 <- read.csv("DataTrial2_endroute.csv")
+rawdata2 <- read.csv("Data2all.csv")
+rawdata2$RunNumFac<-factor(rawdata2$RunNum)
+
+enddata2<- read.csv("Data2Endroute.csv")
 
 #Manipulate Data----
 
@@ -32,7 +35,7 @@ ggplot(rawdata2,aes(x=RunNum, y=ER, color=Group))+
   ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
   labs(x="Maze Run Number", y="Efficiency Rating")
 
-ggplot(rawdata2,aes(x=RunNum, y=ER))+
+ggplot(enddata2,aes(x=RunNum, y=ER, color=Group))+
   geom_point()+
   ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
   labs(x="Maze Run Number", y="Efficiency Rating")+
@@ -106,8 +109,26 @@ ggplot(figurestacked, aes(x=RunNum, y=value, color=trait))+
 library(nlme)
 
 #fitting linear regression model with random effects
-ERmodel<-lme(ER~RunNum, random=~1|Group,data=rawdata2)
+
+ERmodel<-lme(ER~RunNum, random=~1|Group,data=enddata2)
 summary(ERmodel)
+anova(ERmodel)
+
+ERmodelall<-lme(ER~RunNum*Day, correlation=corAR1(form=~Day|Group/RunNum), random=~1|Group,data=rawdata2)
+summary(ERmodelall)
+anova(ERmodelall,type="marginal") #effect of day after accounting for all the other effects, more conservative
+
+options(contrasts=c("contr.helmert","contr.poly"))
+ERmodelfac<-lme(ER~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=rawdata2)
+summary(ERmodelfac)
+anova(ERmodelfac,type="marginal")
+
+ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
+  geom_point()+
+  ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
+  labs(x="Day", y="Efficiency Rating")+
+  geom_smooth(method = "lm")
+
 
 plot(ERmodel, type="p")
 
