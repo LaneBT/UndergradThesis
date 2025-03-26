@@ -10,7 +10,7 @@ enddata2<- read.csv("endrouteData2_v2.csv")
 
 library(nlme)
 
-#looking at how progression of ER changes over DAY, separated by run number
+#looking at how progression of ER changes over DAY, separated by run number-----
 options(contrasts=c("contr.helmert","contr.poly"))
 ERmodelfac<-lme(ER~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=rawdata2)
 summary(ERmodelfac)
@@ -26,7 +26,11 @@ ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
   geom_smooth(method = "lm")
 
 
-#SAME THING BUT WITH DIV ---> I DONT THINK THIS IS A APPROPRIATE MODEL FOR THIS
+
+
+
+
+#SAME THING BUT WITH DIV ---> I DONT THINK THIS IS A APPROPRIATE MODEL FOR THIS-----
 
 #looking at how progression of number of Diversions changes over DAY, separated by run number
 options(contrasts=c("contr.helmert","contr.poly"))
@@ -43,7 +47,7 @@ ggplot(rawdata2,aes(x=Day, y=DIV, color=RunNumFac))+
 
 
 
-#Same thing but with Cht
+#Same thing but with Cht-----
 
 #looking at how progression of cheating instances changes over DAY, separated by run number
 options(contrasts=c("contr.helmert","contr.poly"))
@@ -61,7 +65,7 @@ ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
 
 
 
-#General linear effects with randomization for group
+#General linear effects with randomization for group-----
 #fitting linear regression model with random effects
 
 ERmodel<-lme(ER~RunNum, random=~1|Group,data=enddata2)
@@ -101,6 +105,11 @@ ggplot(puredatall,aes(x=Day, y=ER, color=RunNumFac))+
   geom_smooth(method = "lm")
 
 
+
+
+
+#I am not sure these work.
+
 puredatend<-enddata2[!enddata2$CONTAM == "1", ]
 
 ERmodel_p<-lme(ER~RunNum, random=~1|Group,data=puredatend)
@@ -114,5 +123,12 @@ anova(Daymodel_p)
 Divmodel_p<-lme(DIV~RunNum, random=~1|Group,data=puredatend)
 summary(Divmodel_p)
 anova(Divmodel_p)
+
+
+
+
+
+
+
 
 
