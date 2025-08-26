@@ -1,7 +1,16 @@
-# Statistical Analysis, Undergraduate Thesis
-#FOR REVIEW AND REVISION BY PI (Thank you Dr. Farrer!!)
+#Investigating slime mold (Physarum polycephalum) memory through maze solving ability
+#Undergraduate Honors Thesis, Lane Birusingh Tellegen
+#Annotated Statistical Analysis 
 
 
+#Install all necessary packages
+install.packages("nlme")
+install.packages("ggplot2")
+install.packages("tidyr")
+install.packages("dplyr")
+install.packages("RColorBrewer")
+
+#Add packages to library
 library(nlme)
 library(ggplot2)
 library(tidyr)
@@ -16,16 +25,17 @@ rawdata2 <- read.csv("Data2_v2.csv")
 rawdata2$RunNumFac<-factor(rawdata2$RunNum)
 rawdata2$CONTAMFac<-factor(rawdata2$CONTAM)
 
-#This is what we did together during office hours-----
+#-----
 
-#linear regression model with randomization (randomizing for group, run number is nested in Group)
-#lloking at how progression of Efficiency Rating changes over maze run attempts
+#linear regression model with randomization (randomizing for Group, Run Number is nested in Group)
+#looking at how progression of Efficiency Rating (dependent variable) changes over maze run attempts (independent variable)
 #Expected results: as maze run number increases, ER should climb less rapidly 
 #(ie the mold is more 'precise', ends with a lower efficiency rating, which means it is MORE EFFICIENT)
 
 options(contrasts=c("contr.helmert","contr.poly"))
 ERmodelfac<-lme(ER~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=rawdata2)
 summary(ERmodelfac)
+#Perform an anova on the model to see if statistically significant
 anova(ERmodelfac,type="marginal")
 #Significant
 
@@ -44,7 +54,7 @@ puredatall<-rawdata2[!rawdata2$CONTAM == "1", ]
 puredatall<-rawdata2[!rawdata2$RunNumFac == "5", ]
 
 
-#ER
+#Linear regression model: Using Efficiancy Rating instead of Run Number
 
 options(contrasts=c("contr.helmert","contr.poly"))
 CERmodelfac<-lme(ER~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=puredatall)
@@ -54,6 +64,12 @@ anova(CERmodelfac,type="marginal")
 
 #Graph of how efficiency rating changes over maze attempts 
 ggplot(puredatall,aes(x=Day, y=ER, color=RunNumFac))+
+  
+  
+  
+  
+  
+  
   geom_point()+
   ggtitle("Efficiency of P. polycephalum over Maze Attempts: Contamination Removed")+
   labs(x="Day", y="Efficiency Rating", color="Maze Attempt Number")+
@@ -61,7 +77,7 @@ ggplot(puredatall,aes(x=Day, y=ER, color=RunNumFac))+
   scale_color_brewer(palette = "Greens")
 
 
-#DIV
+#Linear regression model: Using Diversions
 
 options(contrasts=c("contr.helmert","contr.poly"))
 CDIVmodelfac<-lme(DIV~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=puredatall)
@@ -69,6 +85,7 @@ summary(CDIVmodelfac)
 anova(CDIVmodelfac,type="marginal")
 #Significant
 
+#Graph of how diversion number changes over maze attempts 
 ggplot(puredatall,aes(x=Day, y=DIV, color=RunNumFac))+
   geom_point()+
   ggtitle("Number of Diversions (deadends) over Maze Attempts: Contamination Removed")+
@@ -77,7 +94,7 @@ ggplot(puredatall,aes(x=Day, y=DIV, color=RunNumFac))+
   scale_color_brewer(palette = "PuRd")
 
 
-#CHT
+#Linear regression model: Using Cheating Instances
 
 options(contrasts=c("contr.helmert","contr.poly"))
 CCHTmodelfac<-lme(CHT~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=puredatall)
@@ -85,16 +102,13 @@ summary(CCHTmodelfac)
 anova(CCHTmodelfac,type="marginal")
 #Significant
 
+#Graph of how cheating changes over maze attempts
 ggplot(puredatall,aes(x=Day, y=CHT, color=RunNumFac))+
   geom_point()+
   ggtitle("Progression of cheating (wall jumping) over Maze Attempts: Contamination Removed")+
   labs(x="Day", y="Cheating Instances (wall jumping)", color="Maze Attempt Number")+
   geom_smooth(method = "lm")+
   scale_color_brewer(palette = "YlOrRd")
-
-
-
-
 
 
 
@@ -310,7 +324,7 @@ ggplot(crazy2,aes(x=Day, y=ER, color=ContaminationLocation))+
 
 Databar<-pivot_longer(datacont,c(5,18),names_to="Name",values_to="value",values_drop_na=TRUE)
 
-  
+
 ggplot(Databar, aes(fill=Group, y=value, x=RunNum)) + 
   geom_bar(position="dodge", stat="identity")+
   facet_wrap(~Name, scale="free")
