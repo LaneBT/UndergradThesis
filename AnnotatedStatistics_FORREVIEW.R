@@ -176,7 +176,7 @@ ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
 
 #QUESTION: Are these the best types of models for these variables??
 
-#I also created just similar linear regression models with randomization-----
+#I also created just similar linear regression models with randomization
 #Randomized for Group (ie the conserved lineages that I recorded maze run number within)
 #Completed with only data from the final plate of each run (end route data)
 
