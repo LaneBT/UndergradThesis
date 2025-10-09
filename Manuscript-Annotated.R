@@ -28,9 +28,9 @@ rawdata2$CONTAMFac<-factor(rawdata2$CONTAM)
 #This is what we did together during office hours-----
 
 #linear regression model with randomization (randomizing for group, run number is nested in Group)
-#lloking at how progression of Efficiency Rating (dependent variable) changes over maze run attempts (independent variable)
-#Expected results: as maze run number increases, ER should climb less rapidly 
-#(ie the mold is more 'precise', ends with a lower efficiency rating, which means it is MORE EFFICIENT)
+#looking at how progression of path length (dependent variable) changes over maze run attempts (independent variable)
+#Expected results: as maze run number increases, path length should climb less rapidly 
+#(ie the mold is more 'precise', ends with a lower/shorter path legth, which means it is MORE EFFICIENT)
 
 options(contrasts=c("contr.helmert","contr.poly"))
 ERmodelfac<-lme(ER~RunNumFac*Day, correlation=corAR1(form=~Day|Group/RunNumFac), random=~1|Group,data=rawdata2)
@@ -41,8 +41,12 @@ anova(ERmodelfac,type="marginal")
 #Graph of how efficiency rating changes over maze attempts 
 ERPlot<- ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
   geom_jitter()+
+  theme(
+    panel.grid.major = element_blank(), # Remove major grid lines
+    panel.grid.minor = element_blank()  # Remove minor grid lines
+  )+
   labs(x="Day", y="Path Length", color="Maze Attempt Number", tag= "A")+
-  geom_smooth(method = "lm")+
+  geom_smooth(method = "lm", se = FALSE)+ #se=FALSE removes shaded error bars
   scale_color_brewer(palette = "Greens")
 
 #Repeat with diversions as the dependent variable 
@@ -55,8 +59,12 @@ anova(DIVmodelfac,type="marginal")
 
 DIVPlot<- ggplot(rawdata2,aes(x=Day, y=DIV, color=RunNumFac))+
   geom_jitter()+
+  theme(
+    panel.grid.major = element_blank(), # Remove major grid lines
+    panel.grid.minor = element_blank()  # Remove minor grid lines
+  )+
   labs(x="Day", y="Dead Ends", color="Maze Attempt Number", tag = "B")+
-  geom_smooth(method = "lm")+
+  geom_smooth(method = "lm", se = FALSE)+
   scale_color_brewer(palette = "PuRd")
 
 #repeat with cheating as dependent variable
@@ -69,8 +77,12 @@ anova(CHTmodelfac,type="marginal")
 
 CHTPlot<- ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
   geom_jitter()+
-  labs(x="Day", y="Cheating (wall jumping)", color="Maze Attempt Number", tag ="C")+
-  geom_smooth(method = "lm")+
+  theme(
+    panel.grid.major = element_blank(), # Remove major grid lines
+    panel.grid.minor = element_blank()  # Remove minor grid lines
+  )+
+  labs(x="Day", y="Cheating", color="Maze Attempt Number", tag ="C")+
+  geom_smooth(method = "lm", se = FALSE)+
   scale_color_brewer(palette = "YlOrRd")
 
 
@@ -79,9 +91,7 @@ CHTPlot<- ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
 install.packages("gridExtra")
 library(gridExtra)
 
-grid.arrange(ERPlot, DIVPlot, CHTPlot,
-  top= "Physarum polycephalum Growth over Maze Attempts",
-  nrow=3)
+grid.arrange(ERPlot, DIVPlot, CHTPlot, nrow=3)
 
 
 #Remove contaminated plates from the data set and repeat statistics
