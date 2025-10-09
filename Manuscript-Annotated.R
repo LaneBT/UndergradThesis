@@ -39,10 +39,9 @@ anova(ERmodelfac,type="marginal")
 #Significant
 
 #Graph of how efficiency rating changes over maze attempts 
-ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
-  geom_point()+
-  ggtitle("Efficiency of P. polycephalum over Maze Attempts")+
-  labs(x="Day", y="Efficiency Rating", color="Maze Attempt Number")+
+ERPlot<- ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
+  geom_jitter()+
+  labs(x="Day", y="Path Length", color="Maze Attempt Number", tag= "A")+
   geom_smooth(method = "lm")+
   scale_color_brewer(palette = "Greens")
 
@@ -54,10 +53,9 @@ summary(DIVmodelfac)
 anova(DIVmodelfac,type="marginal")
 #Significant
 
-ggplot(rawdata2,aes(x=Day, y=DIV, color=RunNumFac))+
-  geom_point()+
-  ggtitle("Number of Diversions (deadends) over Maze Attempts")+
-  labs(x="Day", y="Dead Ends", color="Maze Attempt Number")+
+DIVPlot<- ggplot(rawdata2,aes(x=Day, y=DIV, color=RunNumFac))+
+  geom_jitter()+
+  labs(x="Day", y="Dead Ends", color="Maze Attempt Number", tag = "B")+
   geom_smooth(method = "lm")+
   scale_color_brewer(palette = "PuRd")
 
@@ -69,12 +67,21 @@ summary(CHTmodelfac)
 anova(CHTmodelfac,type="marginal")
 #Significant
 
-ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
-  geom_point()+
-  ggtitle("Progression of cheating (wall jumping) over Maze Attempts")+
-  labs(x="Day", y="Cheating Instances (wall jumping)", color="Maze Attempt Number")+
+CHTPlot<- ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
+  geom_jitter()+
+  labs(x="Day", y="Cheating (wall jumping)", color="Maze Attempt Number", tag ="C")+
   geom_smooth(method = "lm")+
   scale_color_brewer(palette = "YlOrRd")
+
+
+#creating a combined figure 
+
+install.packages("gridExtra")
+library(gridExtra)
+
+grid.arrange(ERPlot, DIVPlot, CHTPlot,
+  top= "Physarum polycephalum Growth over Maze Attempts",
+  nrow=3)
 
 
 #Remove contaminated plates from the data set and repeat statistics
@@ -135,9 +142,6 @@ ggplot(puredatall,aes(x=Day, y=CHT, color=RunNumFac))+
   labs(x="Day", y="Cheating Instances (wall jumping)", color="Maze Attempt Number")+
   geom_smooth(method = "lm")+
   scale_color_brewer(palette = "YlOrRd")
-
-
-
 
 
 
