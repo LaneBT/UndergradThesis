@@ -118,11 +118,14 @@ anova(CERmodelfac,type="marginal")
 #Significant
 
 #Graph of how efficiency rating changes over maze attempts 
-ggplot(puredatall,aes(x=Day, y=ER, color=RunNumFac))+
-  geom_point()+
-  ggtitle("Efficiency of P. polycephalum over Maze Attempts: Contamination Removed")+
-  labs(x="Day", y="Efficiency Rating", color="Maze Attempt Number")+
-  geom_smooth(method = "lm")+
+ERrm<-ggplot(puredatall,aes(x=Day, y=ER, color=RunNumFac))+
+  geom_jitter()+
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+  )+
+  labs(x="Day", y="Path Length", color="Maze Attempt Number")+
+  geom_smooth(method = "lm", se = FALSE)+
   scale_color_brewer(palette = "Greens")
 
 
@@ -134,13 +137,15 @@ summary(CDIVmodelfac)
 anova(CDIVmodelfac,type="marginal")
 #Significant
 
-ggplot(puredatall,aes(x=Day, y=DIV, color=RunNumFac))+
-  geom_point()+
-  ggtitle("Number of Diversions (deadends) over Maze Attempts: Contamination Removed")+
-  labs(x="Day", y="Dead Ends", color="Maze Attempt Number")+
-  geom_smooth(method = "lm")+
+DIVrm<-ggplot(puredatall,aes(x=Day, y=DIV, color=RunNumFac))+
+  geom_jitter()+
+  theme(
+    panel.grid.major = element_blank(), # Remove major grid lines
+    panel.grid.minor = element_blank()  # Remove minor grid lines
+  )+
+  labs(x="Day", y="Dead Ends", color="Maze Attempt Number", tag = "B")+
+  geom_smooth(method = "lm", se = FALSE)+
   scale_color_brewer(palette = "PuRd")
-
 
 #CHT
 
@@ -150,11 +155,16 @@ summary(CCHTmodelfac)
 anova(CCHTmodelfac,type="marginal")
 #Significant
 
-ggplot(puredatall,aes(x=Day, y=CHT, color=RunNumFac))+
-  geom_point()+
-  ggtitle("Progression of cheating (wall jumping) over Maze Attempts: Contamination Removed")+
-  labs(x="Day", y="Cheating Instances (wall jumping)", color="Maze Attempt Number")+
-  geom_smooth(method = "lm")+
+CHTrm<-ggplot(puredatall,aes(x=Day, y=CHT, color=RunNumFac))+
+  geom_jitter()+
+  theme(
+    panel.grid.major = element_blank(), # Remove major grid lines
+    panel.grid.minor = element_blank()  # Remove minor grid lines
+  )+
+  labs(x="Day", y="Cheating", color="Maze Attempt Number", tag ="C")+
+  geom_smooth(method = "lm", se = FALSE)+
   scale_color_brewer(palette = "YlOrRd")
 
+#make combo figure, contamination removed.
 
+grid.arrange(ERrm, DIVrm, CHTrm, nrow=3)
