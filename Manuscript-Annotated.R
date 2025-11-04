@@ -38,6 +38,8 @@ summary(ERmodelfac)
 anova(ERmodelfac,type="marginal")
 #Significant
 
+
+
 #Graph of how efficiency rating changes over maze attempts 
 ERPlot<- ggplot(rawdata2,aes(x=Day, y=ER, color=RunNumFac))+
   geom_jitter()+
@@ -75,6 +77,7 @@ summary(CHTmodelfac)
 anova(CHTmodelfac,type="marginal")
 #Significant
 
+
 CHTPlot<- ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
   geom_jitter()+
   theme(
@@ -84,6 +87,7 @@ CHTPlot<- ggplot(rawdata2,aes(x=Day, y=CHT, color=RunNumFac))+
   labs(x="Day", y="Cheating", color="Maze Attempt Number", tag ="C")+
   geom_smooth(method = "lm", se = FALSE)+
   scale_color_brewer(palette = "YlOrRd")
+
 
 
 #creating a combined figure 
@@ -152,7 +156,5 @@ ggplot(puredatall,aes(x=Day, y=CHT, color=RunNumFac))+
   labs(x="Day", y="Cheating Instances (wall jumping)", color="Maze Attempt Number")+
   geom_smooth(method = "lm")+
   scale_color_brewer(palette = "YlOrRd")
-
-
 
 
